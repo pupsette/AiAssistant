@@ -14,6 +14,9 @@ namespace Assistant.Core.Audio
 
         public async Task PlayAsync(string text, CancellationToken cancellationToken, OpenAI.Audio.SpeechVoice voice = OpenAI.Audio.SpeechVoice.Alloy)
         {
+            if (string.IsNullOrWhiteSpace(text))
+                return;
+
             var response = await client.AudioEndpoint.CreateSpeechAsync(new OpenAI.Audio.SpeechRequest(text, voice: voice), cancellationToken: cancellationToken);
             await PlayMP3FromStreamAsync(new MemoryStream(response.ToArray()), cancellationToken);
         }
